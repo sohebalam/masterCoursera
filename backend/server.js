@@ -1,6 +1,9 @@
 import express from "express"
 import http from "http"
 import path from "path"
+import dishRouter from "./routes/dishRouter.js"
+import leaderRouter from "./routes/leaderRouter.js"
+import promoRouter from "./routes/promoRouter.js"
 const __dirname = path.resolve()
 
 const app = express()
@@ -8,47 +11,9 @@ const app = express()
 app.use(express.json())
 app.use(express.static(__dirname + "/public"))
 
-app.all("/dishes", (req, res, next) => {
-  res.statusCode = 200
-  res.setHeader("Content-Type", "text/plain")
-  next()
-})
-
-app.get("/dishes", (req, res, next) => {
-  res.end("will send dishes")
-})
-
-app.post("/dishes", (req, res, next) => {
-  res.end(
-    "will add the dish: " +
-      req.body.name +
-      " with details: " +
-      req.body.description
-  )
-})
-
-app.put("/dishes", (req, res, next) => {
-  ;(res.statusCode = 403), res.end("put operation not supported ")
-})
-
-app.delete("/dishes", (req, res, next) => {
-  res.end("deleting all the dishes")
-})
-app.get("/dishes/:dishId", (req, res, next) => {
-  res.end("will send dish " + req.params.dishId)
-})
-
-app.post("/dishes/:dishId", (req, res, next) => {
-  res.end((res.statusCode = 403), res.end("post operation not supported "))
-})
-
-app.put("/dishes/:dishId", (req, res, next) => {
-  res.end("will update " + req.params.dishId)
-})
-
-app.delete("/dishes/:dishId", (req, res, next) => {
-  res.end("deleting  the dish " + req.params.dishId)
-})
+app.use("/dishes", dishRouter)
+app.use("/promotions", promoRouter)
+app.use("/leaders", leaderRouter)
 
 app.use((req, res, next) => {
   console.log(req.headers)
